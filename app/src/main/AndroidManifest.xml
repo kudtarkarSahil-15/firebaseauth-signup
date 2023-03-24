@@ -11,14 +11,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Firebaseauth"
+        android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
+
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,8 +24,14 @@
         </activity>
 
         <activity
+            android:name=".RegisterActivity"
+            android:exported="true"
+            android:parentActivityName=".LoginActivity">
+        </activity>
+
+        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
     </application>
 

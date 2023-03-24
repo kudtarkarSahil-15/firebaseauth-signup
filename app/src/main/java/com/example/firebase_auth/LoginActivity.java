@@ -7,26 +7,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email, password;
+    TextInputEditText email, password;
     Button loginButton;
-    FirebaseAuth mAuth;
+    TextView gotoRegister;
+    FirebaseAuth fAuth;
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = fAuth.getCurrentUser();
         if(currentUser != null){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
@@ -39,19 +41,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        email = findViewById(R.id.emailId);
-        password = findViewById(R.id.passwordId);
+        fAuth = FirebaseAuth.getInstance();
+        email = (TextInputEditText) findViewById(R.id.emailId);
+        password = (TextInputEditText) findViewById(R.id.passwordId);
         loginButton = findViewById(R.id.loginButton);
+        gotoRegister = findViewById(R.id.gotoReg);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String emailL = email.getText().toString();
-                String passwordL = password.getText().toString();
+                String emailL = String.valueOf(email.getText());
+                String passwordL = String.valueOf(password.getText());
 
-                mAuth.signInWithEmailAndPassword(emailL, passwordL)
+                fAuth.signInWithEmailAndPassword(emailL, passwordL)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -71,6 +74,16 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
+            }
+        });
+
+
+        gotoRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

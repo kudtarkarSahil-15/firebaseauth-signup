@@ -7,26 +7,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText email, password;
+    TextInputEditText name, email, password;
     Button registerButton;
-    FirebaseAuth mAuth;
+    TextView gotoLogin;
+    FirebaseAuth fAuth;
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = fAuth.getCurrentUser();
         if(currentUser != null){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
@@ -38,19 +42,22 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        mAuth = FirebaseAuth.getInstance();
-        email = (EditText) findViewById(R.id.emailId);
-        password = (EditText) findViewById(R.id.passwordId);
+        fAuth = FirebaseAuth.getInstance();
+        name = findViewById(R.id.nameId);
+        email = findViewById(R.id.emailId);
+        password = findViewById(R.id.passwordId);
         registerButton = (Button) findViewById(R.id.registerButton);
+        gotoLogin = findViewById(R.id.gotoLogin);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String emailR = email.getText().toString();
-                String passwordR = password.getText().toString();
+                String nameR = String.valueOf(name.getText());
+                String emailR = String.valueOf(email.getText());
+                String passwordR = String.valueOf(password.getText());
 
-                mAuth.createUserWithEmailAndPassword(emailR, passwordR)
+                fAuth.createUserWithEmailAndPassword(emailR, passwordR)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -61,7 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                     startActivity(intent);
-                                    finish();
 
                                 } else {
                                     // If sign in fails, display a message to the user
@@ -70,6 +76,15 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             }
                         });
+            }
+        });
+
+        gotoLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
